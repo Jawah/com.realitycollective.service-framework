@@ -22,8 +22,8 @@ namespace RealityCollective.ServiceFramework.Editor
 {
     public class ServiceWizard : EditorWindow
     {
-        private const float MIN_VERTICAL_SIZE_SERVICE = 200f;
-        private const float MIN_VERTICAL_SIZE_SERVICEMODULE = 240f;
+        private const float MIN_VERTICAL_SIZE_SERVICE = 240f;
+        private const float MIN_VERTICAL_SIZE_SERVICEMODULE = 280f;
         private const float MIN_HORIZONTAL_SIZE = 384f;
 
         private const string TABS = "        ";
@@ -36,6 +36,7 @@ namespace RealityCollective.ServiceFramework.Editor
         private const string INTERFACE = "#INTERFACE#";
         private const string IMPLEMENTS = "#IMPLEMENTS#";
         private const string PARENT_INTERFACE = "#PARENT_INTERFACE#";
+        private const string PROFILE_CATEGORY = "#PROFILE_CATEGORY#";
         private const string SERVICE_MODULE_NAME = "ServiceModule";
         private const string SERVICE_NAME = "Service";
 
@@ -73,6 +74,7 @@ namespace RealityCollective.ServiceFramework.Editor
         private string @namespace = string.Empty;
         private string @parentInterfaceName = string.Empty;
         private string instanceName = string.Empty;
+        private string profileCategory = "Custom Service Profiles";
         private bool generateProfile = true;
         private Type parentInterfaceType = null;
         private bool isServiceType = true;
@@ -189,6 +191,10 @@ namespace RealityCollective.ServiceFramework.Editor
             EditorGUILayout.Space();
 
             generateProfile = EditorGUILayout.Toggle("Generate Profile?", generateProfile);
+
+            if (generateProfile)
+                profileCategory = EditorGUILayout.TextField("Profile Category", profileCategory);
+                
             GUILayout.FlexibleSpace();
 
             GUI.enabled = !string.IsNullOrWhiteSpace(instanceName) && !string.IsNullOrWhiteSpace(@namespace);
@@ -414,7 +420,7 @@ namespace RealityCollective.ServiceFramework.Editor
         private void GenerateProfile(string profileBaseTypeName, List<string> usingList)
         {
             usingList.Clear();
-
+            
             usingList.EnsureListItem(profileBaseType.Namespace);
             usingList.EnsureListItem("RealityCollective.ServiceFramework.Interfaces");
             usingList.EnsureListItem("UnityEngine");
@@ -428,6 +434,7 @@ namespace RealityCollective.ServiceFramework.Editor
             profileTemplate = profileTemplate.Replace(NAMESPACE, @namespace);
             profileTemplate = profileTemplate.Replace(NAME, instanceName);
             profileTemplate = profileTemplate.Replace(BASE, profileBaseTypeName);
+            profileTemplate = profileTemplate.Replace(PROFILE_CATEGORY, profileCategory);
 
             File.WriteAllText($"{outputPath}/{instanceName}Profile.cs", profileTemplate);
         }
