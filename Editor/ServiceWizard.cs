@@ -74,7 +74,7 @@ namespace RealityCollective.ServiceFramework.Editor
         private string @namespace = string.Empty;
         private string @parentInterfaceName = string.Empty;
         private string instanceName = string.Empty;
-        private string profileCategory = "Custom Service Profiles";
+        private string profileCategory = "Reality Collective/Custom Service Profiles";
         private bool generateProfile = true;
         private Type parentInterfaceType = null;
         private bool isServiceType = true;
